@@ -53,4 +53,10 @@ def download_ultralight(fips_dir, proj_dir):
 
 def run(fips_dir, proj_dir, args):
     download_ultralight(fips_dir, proj_dir)
-    
+
+def help():
+    """print 'ultralight' help"""
+    log.info(log.YELLOW +
+             "fips ultralight\n"
+             "  Downloads and upacks a version of ultralight to the deploy folder"
+             )
