@@ -8,7 +8,7 @@
 #===============================================================================
 
 from codecs import ignore_errors
-import os, shutil, subprocess, py7zr, shutil
+import os, shutil, subprocess, py7zr, shutil, glob
 from urllib.request import urlretrieve
 
 from mod import log, util,settings
@@ -42,7 +42,12 @@ def download_ultralight(fips_dir, proj_dir):
     target_dir = util.get_workspace_dir(fips_dir) + '/fips-deploy/ultralight/'
     log.info("Copying to deploy {}".format(target_dir))
     shutil.copytree(extract_dir + '/include', target_dir + '/include', dirs_exist_ok=True)
-    shutil.copytree(extract_dir + '/lib', target_dir + '/lib', dirs_exist_ok=True)
+    if os.path.isdir(extract_dir + '/lib'):
+        shutil.copytree(extract_dir + '/lib', target_dir + '/lib', dirs_exist_ok=True)
+    else:
+        make_dirs(target_dir + '/lib')
+        for lib in glob.glob(extract_dir + '/bin/*.so'):
+            shutil.copy(lib, target_dir + '/lib')
 
     cur_cfg = settings.get(proj_dir, 'config')
     target_dir = util.get_deploy_dir(fips_dir, util.get_project_name_from_dir(proj_dir), cur_cfg)
