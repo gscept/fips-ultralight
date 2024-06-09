@@ -8,7 +8,7 @@
 #===============================================================================
 
 from codecs import ignore_errors
-import os, shutil, subprocess, py7zr, shutil, glob
+import os, shutil, subprocess, shutil, glob, sys
 from urllib.request import urlretrieve
 
 from mod import log, util,settings
@@ -31,13 +31,17 @@ def download_ultralight(fips_dir, proj_dir):
         shutil.rmtree(extract_dir, ignore_errors=True)
     make_dirs(extract_dir)
     
-    target_file = target_dir + 'utralite.7z'
+    target_file = target_dir + 'ultralight.7z'
     if not os.path.exists(target_file):
         log.info("downloading '{}'...".format(file_url))
         urlretrieve(file_url, target_file, util.url_download_hook)
     log.info("\nunpacking ... {}".format(target_file))
-    archive = py7zr.SevenZipFile(target_file)
-    archive.extractall(extract_dir)
+    if sys.platform == "win32":
+        import py7zr
+        archive = py7zr.SevenZipFile(target_file)
+        archive.extractall(extract_dir)
+    elif sys.platform == "darwin":
+        subprocess.call('7za x -o{} -y {}'.format(extract_dir, target_file), shell=True)
     
     target_dir = util.get_workspace_dir(fips_dir) + '/fips-deploy/ultralight/'
     log.info("Copying to deploy {}".format(target_dir))
