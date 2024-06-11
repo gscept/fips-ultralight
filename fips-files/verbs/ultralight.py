@@ -39,9 +39,11 @@ def download_ultralight(fips_dir, proj_dir):
     if sys.platform == "win32":
         import py7zr
         archive = py7zr.SevenZipFile(target_file)
+        log.info("extracting to '{}'".format(extract_dir))
         archive.extractall(extract_dir)
     elif sys.platform == "darwin":
-        subprocess.call('7za x -o{} -y -bsp0 {}'.format(extract_dir, target_file), shell=True)
+        log.info("extracting to '{}'".format(extract_dir))
+        subprocess.call('7za x -o{} -y -bsp0 -bso0 {}'.format(extract_dir, target_file), shell=True)
     
     target_dir = util.get_workspace_dir(fips_dir) + '/fips-deploy/ultralight/'
     log.info("Copying to deploy {}".format(target_dir))
