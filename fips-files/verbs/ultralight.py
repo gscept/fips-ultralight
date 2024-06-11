@@ -34,15 +34,13 @@ def download_ultralight(fips_dir, proj_dir):
     target_file = target_dir + 'ultralight.7z'
     if not os.path.exists(target_file):
         log.info("downloading '{}'...".format(file_url))
-        urlretrieve(file_url, target_file, util.url_download_hook)
+        urlretrieve(file_url, target_file, None)
     log.info("\nunpacking ... {}".format(target_file))
     if sys.platform == "win32":
         import py7zr
         archive = py7zr.SevenZipFile(target_file)
-        log.info("extracting to '{}'".format(extract_dir))
         archive.extractall(extract_dir)
     elif sys.platform == "darwin":
-        log.info("extracting to '{}'".format(extract_dir))
         subprocess.call('7za x -o{} -y -bsp0 -bso0 {}'.format(extract_dir, target_file), shell=True)
     
     target_dir = util.get_workspace_dir(fips_dir) + '/fips-deploy/ultralight/'
