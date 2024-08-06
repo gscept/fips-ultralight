@@ -26,7 +26,7 @@ def download_ultralight(fips_dir, proj_dir):
     file_url = ULTRALIGHT_URL.format(ULTRALIGHT_RELEASE, ULTRALIGHT_RELEASE, platform_dict[util.get_host_platform()])
     target_dir = util.get_workspace_dir(fips_dir) + '/fips-build/ultralight-cache/'
     make_dirs(target_dir)
-    extract_dir = target_dir + 'extract/'
+    extract_dir = target_dir + 'extract'
     if os.path.isdir(extract_dir):
         shutil.rmtree(extract_dir, ignore_errors=True)
     make_dirs(extract_dir)
